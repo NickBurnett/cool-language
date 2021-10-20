@@ -1,2 +1,6 @@
 985 +84393 -293
 +0
+"test"
+"another \ttest with \x\"193784 <- numbers"
+my_var
+0my_value0298

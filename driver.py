@@ -6,6 +6,7 @@ lines = f.readlines()
 f.close()
 
 for line in lines:
+  lexer.LINE += 1
   while len(line) > 0:
     output: lexer.LexOutput = lexer.lex(line)
     line = output.rest
