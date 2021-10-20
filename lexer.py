@@ -15,6 +15,7 @@ KEYWORDS = [
 
 class OutputType:
   TOKEN_ID: str = "ID"
+  TOKEN_KEYWORD: str = "KEYWORD"
   TOKEN_INT: str = "INT"
   TOKEN_STRING: str = "STRING"
   TOKEN_COMMENT: str = "COMMENT"
@@ -42,7 +43,7 @@ def lexID(line: str):
     id += line[0]
     line = line[1:]
   if id in KEYWORDS:
-    return LexOutput(OutputType.ERROR, "Keyword found at line {0} while lexing an ID".format(LINE), line)
+    return LexOutput(OutputType.TOKEN_KEYWORD, id, line)
   return LexOutput(OutputType.TOKEN_ID, id, line)
 
 
@@ -114,13 +115,38 @@ def lex(line: str):
       return LexOutput(OutputType.LEXEME, "-", line[1:])
   elif line[0] == ";":
     return LexOutput(OutputType.LEXEME, ";", line[1:])
+  elif line[0] == "(":
+    return LexOutput(OutputType.LEXEME, "(", line[1:])
+  elif line[0] == ")":
+    return LexOutput(OutputType.LEXEME, ")", line[1:])
   elif line[0] == "=":
     return LexOutput(OutputType.LEXEME, "=", line[1:])
   elif line[0] == "!":
     if len(line[1:]) > 0 and line[1:][0] == "=":
       return LexOutput(OutputType.LEXEME, "!=", line[2:])
     else:
-      return LexOutput(OutputType.ERROR, "Unexpected input at line {0}".format(LINE),line)
+      return LexOutput(OutputType.ERROR, "Unexpected input at line {0}".format(LINE), line)
+  elif line[0] == "/":
+    return LexOutput(OutputType.LEXEME, "/", line[1:])
+  elif line[0] == "*":
+    return LexOutput(OutputType.LEXEME, "*", line[1:])
+  elif line[0] == "%":
+    return LexOutput(OutputType.LEXEME, "%", line[1:])
+  elif line[0] == "=":
+    if len(line[1:]) > 0 and line[1:][0] == "=":
+      return LexOutput(OutputType.LEXEME, "==", line[2:])
+    else:
+      return LexOutput(OutputType.LEXEME, "=", line[1:])
+  elif line[0] == "<":
+    if len(line[1:]) > 0 and line[1:][0] == "=":
+      return LexOutput(OutputType.LEXEME, "<=", line[2:])
+    else:
+      return LexOutput(OutputType.LEXEME, "<", line[1:])
+  elif line[0] == ">":
+    if len(line[1:]) > 0 and line[1:][0] == "=":
+      return LexOutput(OutputType.LEXEME, ">=", line[2:])
+    else:
+      return LexOutput(OutputType.LEXEME, ">", line[1:])
   elif line[0] == "\"":
     return lexString(line[1:])
   elif line[0].isalpha() or line[0] == "_":

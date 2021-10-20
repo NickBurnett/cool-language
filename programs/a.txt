@@ -1,2 +1,3 @@
-"my string"
+print "hello, world!"
 my_var = 39
+print my_var
