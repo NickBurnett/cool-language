@@ -106,11 +106,15 @@ def lex(line: str):
   elif line[0] == "+":
     if len(line[1:]) > 0 and line[1:][0].isdigit():
       return lexInt(line)
+    elif len(line[1:]) > 0 and line[1:][0] == "+":
+      return LexOutput(OutputType.LEXEME, "++", line[2:])
     else:
       return LexOutput(OutputType.LEXEME, "+", line[1:])
   elif line[0] == "-":
     if len(line[1:]) > 0 and line[1:][0].isdigit():
       return lexInt(line)
+    elif len(line[1:]) > 0 and line[1:][0] == "-":
+      return LexOutput(OutputType.LEXEME, "--", line[2:])
     else:
       return LexOutput(OutputType.LEXEME, "-", line[1:])
   elif line[0] == ";":
@@ -140,6 +144,8 @@ def lex(line: str):
   elif line[0] == "<":
     if len(line[1:]) > 0 and line[1:][0] == "=":
       return LexOutput(OutputType.LEXEME, "<=", line[2:])
+    elif len(line[1:]) > 1 and line[1:3] == "->":
+      return LexOutput(OutputType.LEXEME, "<->", line[3:])
     else:
       return LexOutput(OutputType.LEXEME, "<", line[1:])
   elif line[0] == ">":
