@@ -1,3 +1,6 @@
-print "hello, world!"
-my_var = 39
-print my_var
+if x > 10
+then
+  print x;
+else
+  print "not 10";
+end;
