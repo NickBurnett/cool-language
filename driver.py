@@ -6,6 +6,10 @@ f = open("programs/{0}.txt".format(sys.argv[1] if len(sys.argv) > 1 else "a"), "
 lines = f.readlines()
 f.close()
 
+debug = False
+if len(sys.argv) > 2 and sys.argv[2] == "--debug":
+  debug = True
+
 lexed = []
 
 for line in lines:
@@ -20,7 +24,7 @@ for line in lines:
       print("[{0}, {1}]".format(output.output_type, output.output))
       sys.exit(1)
 
-if parser.parseProgram(lexed):
+if parser.parseProgram(lexed, debug=debug):
   print("Parsing succeeded...")
 else:
   print("Parsing failed...")

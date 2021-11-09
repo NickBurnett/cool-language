@@ -1,10 +1,9 @@
 get x;
 get y;
-y = x * y;
-if y < 0 and y >= x
-then
-  print "good";
-else
-  print "bad";
+while x < y and y != 0
+do
+  print x;
+  print y;
+  get x;
 end;
-print "end";
+print "done";

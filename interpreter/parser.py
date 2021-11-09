@@ -58,12 +58,13 @@ def parseVExpr():
     return parseValue()
   elif token.output == "<=":
     return parseValue()
-  elif token.output_type == "==":
+  elif token.output == "==":
     return parseValue()
-  elif token.output_type == "!=":
+  elif token.output == "!=":
     return parseValue()
   else:
     revert(token)
+    log("revert", None)
     return True
 
 def parseFExpr():
