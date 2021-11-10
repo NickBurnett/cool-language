@@ -12,6 +12,7 @@ KEYWORDS = [
   "or",
   "not",
   "shift",
+  "exit",
 ]
 
 class OutputType:

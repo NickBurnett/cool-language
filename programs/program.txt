@@ -1,10 +1,17 @@
+print "input:";
 get x;
-get y;
-shift x, (x + 2);
-while x < y and y != 0
-do
+if x > 0
+then
   print x;
-  print y;
-  get x;
+  get y;
+else
+  print "fail";
+  exit 1;
 end;
-print "done";
+print y;
+if y < 0
+then
+  exit 0;
+else
+  exit 2;
+end;

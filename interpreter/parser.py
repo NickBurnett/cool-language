@@ -133,6 +133,9 @@ def parseExpr():
   log("expression", None)
   return parseNExpr() and parseBExpr()
 
+def parseExitArg():
+  return parseExpr()
+
 def parseShiftArg():
   token = next()
   if token.output_type != OutputType.TOKEN_ID:
@@ -164,6 +167,8 @@ def parseStmt():
     return parsePrintArg()
   elif token.output == "shift":
     return parseShiftArg()
+  elif token.output == "exit":
+    return parseExitArg()
   elif token.output == "get":
     token = next()
     return token.output_type == OutputType.TOKEN_ID
