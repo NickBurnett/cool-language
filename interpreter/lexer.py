@@ -10,7 +10,8 @@ KEYWORDS = [
   "do",
   "and",
   "or",
-  "not"
+  "not",
+  "shift",
 ]
 
 class OutputType:
@@ -119,6 +120,8 @@ def lex(line: str):
       return LexOutput(OutputType.LEXEME, "-", line[1:])
   elif line[0] == ";":
     return LexOutput(OutputType.LEXEME, ";", line[1:])
+  elif line[0] == ",":
+    return LexOutput(OutputType.LEXEME, ",", line[1:])
   elif line[0] == "(":
     return LexOutput(OutputType.LEXEME, "(", line[1:])
   elif line[0] == ")":

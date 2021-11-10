@@ -1,5 +1,6 @@
 get x;
 get y;
+shift x, (x + 2);
 while x < y and y != 0
 do
   print x;
