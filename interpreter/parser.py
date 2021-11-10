@@ -199,7 +199,7 @@ def parseStmtList():
       return False
   return stmt and parseStmtList()
 
-def parseProgram(lexed_tokens, debug = False) -> bool:
+def parseProgram(lexed_tokens, debug = False):
   global tokens
   global debugging
   debugging = debug
