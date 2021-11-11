@@ -11,7 +11,7 @@ class ParseOutput:
 tokens = []
 debugging: bool = False
 
-def log(t: str, token: LexOutput):
+def debug(t: str, token: LexOutput):
   if not debugging:
     return
   if not token:
@@ -19,10 +19,13 @@ def log(t: str, token: LexOutput):
     return
   print("{0}: {1} {2}".format(t, token.output_type, token.output))
 
+def error(token: LexOutput):
+  print("Unexpected token '{0}' on line {1}".format(token.output, token.token_line))
+
 def next() -> LexOutput:
   global tokens
   if len(tokens) <= 0:
-    return LexOutput(OutputType.NONE, "End-of-line", "")
+    return LexOutput(OutputType.NONE, "End-of-line", -1, "")
   token = tokens[0]
   tokens = tokens[1:]
   return token
@@ -33,8 +36,9 @@ def revert(token):
 # PARSING
 def parseValue():
   token = next()
-  log("value", token)
+  debug("value", token)
   if token.output_type != OutputType.LEXEME and token.output_type != OutputType.TOKEN_KEYWORD and token.output_type != OutputType.TOKEN_ID and token.output_type != OutputType.TOKEN_INT:
+    error(token)
     return False
   if token.output_type == OutputType.TOKEN_ID:
     return True
@@ -47,14 +51,15 @@ def parseValue():
   elif token.output == "(":
     return parseExpr() and next().output == ")"
   else:
+    error(token)
     return False
 
 def parseVExpr():
   token = next()
-  log("v_expr", token)
+  debug("v_expr", token)
   if token.output_type != OutputType.LEXEME:
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
   if token.output == ">":
     return parseValue()
@@ -70,15 +75,15 @@ def parseVExpr():
     return parseValue()
   else:
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
 
 def parseFExpr():
   token = next()
-  log("f_expr", token)
+  debug("f_expr", token)
   if token.output_type != OutputType.LEXEME:
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
   if token.output == "*":
     return parseTerm()
@@ -88,19 +93,19 @@ def parseFExpr():
     return parseTerm()
   else:
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
 
 def parseFactor():
-  log("factor", None)
+  debug("factor", None)
   return parseValue() and parseVExpr()
 
 def parseTExpr():
   token = next()
-  log("t_expr", token)
+  debug("t_expr", token)
   if token.output_type != OutputType.LEXEME:
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
   if token.output == "+":
     return parseNExpr()
@@ -108,19 +113,19 @@ def parseTExpr():
     return parseNExpr()
   else:
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
 
 def parseTerm():
-  log("term", None)
+  debug("term", None)
   return parseFactor() and parseFExpr()
 
 def parseBExpr():
   token = next()
-  log("b_expr", token)
+  debug("b_expr", token)
   if token.output_type != OutputType.TOKEN_KEYWORD:
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
   if token.output == "and":
     return parseNExpr()
@@ -128,15 +133,15 @@ def parseBExpr():
     return parseNExpr()
   else:
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
 
 def parseNExpr():
-  log("n_expr", None)
+  debug("n_expr", None)
   return parseTerm() and parseTExpr()
 
 def parseExpr():
-  log("expression", None)
+  debug("expression", None)
   return parseNExpr() and parseBExpr()
 
 def parseExitArg():
@@ -145,12 +150,13 @@ def parseExitArg():
 def parseShiftArg():
   token = next()
   if token.output_type != OutputType.TOKEN_ID:
+    error(token)
     return False
   return next().output == "," and parseExpr()
 
 def parsePrintArg():
   token = next()
-  log("print", token)
+  debug("print", token)
   if token.output_type == OutputType.TOKEN_STRING:
     return True
   revert(token)
@@ -158,16 +164,17 @@ def parsePrintArg():
 
 def parseStmt():
   token = next()
-  log("stmt", token)
+  debug("stmt", token)
   if token.output_type != OutputType.TOKEN_KEYWORD and token.output_type != OutputType.TOKEN_ID:
+    error(token)
     return False
   if token.output == "else":
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
   elif token.output == "end":
     revert(token)
-    log("revert", None)
+    debug("revert", None)
     return True
   elif token.output == "print":
     return parsePrintArg()
@@ -186,11 +193,12 @@ def parseStmt():
   elif token.output == "while":
     return parseExpr() and next().output == "do" and parseStmtList() and next().output == "end"
   else:
+    error(token)
     return False
 
 def parseStmtList():
   token = next()
-  log("stmt_list", token)
+  debug("stmt_list", token)
   if token.output_type == OutputType.NONE:
     return True
   revert(token)
@@ -199,9 +207,10 @@ def parseStmtList():
   if token.output != ";":
     if token.output == "else" or token.output == "end":
       revert(token)
-      log("revert", None)
+      debug("revert", None)
       return stmt
     else:
+      error(token)
       return False
   return stmt and parseStmtList()
 
