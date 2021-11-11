@@ -2,6 +2,12 @@ from interpreter.lexer import OutputType, LexOutput
 
 # UTILITY
 
+class ParseOutput:
+  def __init__(self, success: bool, data):
+    self.success = success
+    self.data = data
+
+
 tokens = []
 debugging: bool = False
 
