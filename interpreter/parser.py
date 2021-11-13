@@ -191,12 +191,15 @@ def parseStmtList():
   stmt = parseStmt()
   token = next()
   if token.output != ";":
-    if token.output == "else" or token.output == "end":
-      revert(token)
-      log("revert", None)
-      return stmt
-    else:
-      return False
+    return False
+  token = next()
+  if token.output == "else" or token.output == "end":
+    revert(token)
+    log("revert", None)
+    return stmt
+  else:
+    revert(token)
+    log("revert", None)
   return stmt and parseStmtList()
 
 def parseProgram(lexed_tokens, debug = False):
