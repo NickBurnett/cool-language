@@ -1,6 +1,7 @@
 import sys
 import interpreter.lexer as lexer
 import interpreter.parser as parser
+import interpreter.interpreter as interpreter
 
 f = open("programs/{0}.txt".format(sys.argv[1] if len(sys.argv) > 1 else "a"), "r")
 lines = f.readlines()
@@ -24,7 +25,12 @@ for line in lines:
       print("[{0}, {1}]".format(output.output_type, output.output))
       sys.exit(1)
 
-if parser.parseProgram(lexed, debug=debug):
-  print("Parsing succeeded...")
+code = parser.parseProgram(lexed, parser.VariableStore(), debug=debug)
+if code:
+  for stmt in code:
+    print(stmt)
 else:
   print("Parsing failed...")
+  exit(0)
+
+interpreter.interpret(code, parser.VariableStore())
