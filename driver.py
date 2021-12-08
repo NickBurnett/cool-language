@@ -26,10 +26,7 @@ for line in lines:
       sys.exit(1)
 
 code = parser.parseProgram(lexed, parser.VariableStore(), debug=debug)
-if code:
-  for stmt in code:
-    print(stmt)
-else:
+if not code:
   print("Parsing failed...")
   exit(0)
 

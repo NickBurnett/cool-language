@@ -1,4 +1,4 @@
-print "hello, world!";
+println "hello, world!";
 x = -3;
 my_var = x + 39 + (4 * 2);
-print my_var;
+println my_var;
