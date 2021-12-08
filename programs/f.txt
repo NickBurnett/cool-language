@@ -2,11 +2,12 @@ print "How many numbers will you input? ";
 get num;
 
 i=0;
-sum=0;
+sum = 0;
 while i < num
 do
   get _x;
   sum = sum + _x;
+  i = i + 1;
 end;
 
 q = sum / num;

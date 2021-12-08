@@ -1,3 +1,4 @@
 print "hello, world!";
-my_var = 39;
+x = -3;
+my_var = x + 39 + (4 * 2);
 print my_var;

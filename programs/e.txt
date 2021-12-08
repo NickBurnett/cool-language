@@ -8,3 +8,4 @@ else
   x=-x;
 end;
 print x;
+print "\n";
