@@ -1,6 +1,7 @@
 LINE: int = 0
 KEYWORDS = [
   "print",
+  "println",
   "get",
   "if",
   "then",
@@ -130,6 +131,8 @@ def lex(line: str):
   elif line[0] == ")":
     return LexOutput(OutputType.LEXEME, ")", LINE, line[1:])
   elif line[0] == "=":
+    if len(line[1:]) > 0 and line[1:][0] == "=":
+      return LexOutput(OutputType.LEXEME, "==", LINE, line[2:])
     return LexOutput(OutputType.LEXEME, "=", LINE, line[1:])
   elif line[0] == "!":
     if len(line[1:]) > 0 and line[1:][0] == "=":
